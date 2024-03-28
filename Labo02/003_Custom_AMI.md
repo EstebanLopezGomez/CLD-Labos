@@ -202,21 +202,40 @@ ssh bitnami@localhost -p 2224 -i CLD_KEY_DRUPAL_DEVOPSTEAM06.pem
 
 
 //sql string connection from A
-
+mariadb -h dbi-devopsteam06.cshki92s4w5p.eu-west-3.rds.amazonaws.com -u admin -p
 [OUTPUT]
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 349
+Server version: 10.11.6-MariaDB managed by https://aws.amazon.com/rds/
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]>
 ```
 
 ```sql
 [INPUT]
 //sql string connection from B
-
+mariadb -h dbi-devopsteam06.cshki92s4w5p.eu-west-3.rds.amazonaws.com -u admin -p
 [OUTPUT]
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 345
+Server version: 10.11.6-MariaDB managed by https://aws.amazon.com/rds/
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]>
 ```
 
 ### Check HTTP Accesses
 
 ```bash
 //connection string updated
+ssh devopsteam06@15.188.43.46 -i ~/.ssh/CLD_KEY_DMZ_DEVOPSTEAM06.pem -L 2224:10.0.6.140:22 -L 888:10.0.6.140:8080
 ```
 
 ### Read and write test through the web app
@@ -228,7 +247,7 @@ ssh bitnami@localhost -p 2224 -i CLD_KEY_DRUPAL_DEVOPSTEAM06.pem
 * Observations ?
 
 ```
-//TODO
+L'adresse email a été mise à jour dans les deux webapps, on peut donc affirmer que les deux sont bien connectés à la RDS
 ```
 
 ### Change the profil picture
@@ -236,5 +255,5 @@ ssh bitnami@localhost -p 2224 -i CLD_KEY_DRUPAL_DEVOPSTEAM06.pem
 * Observations ?
 
 ```
-//TODO
+La photo de profil n'est pas mise à jour sur la deuxième webapp, on peut donc penser que l'image est stockée localement dans chaque webapp 
 ```
