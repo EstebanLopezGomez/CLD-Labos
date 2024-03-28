@@ -18,7 +18,11 @@ instances.
 
 ```bash
 [INPUT]
+aws ec2 create-security-group --group-name SG-DEVOPSTEAM06-LB --description "Security group for DEVOPSTEAM06" --vpc-id vpc-03d46c285a2af77ba
 
+aws ec2 authorize-security-group-ingress --group-id sg-0cc9cc8ad225a4abe sg-0a0d94ccfd54bbadb --protocol tcp --port 8080 --cidr 10.0.0.0/28 --tag-specifications 'ResourceType=security-group-rule,Tags=[{Key=Description,Value="Allow traffic from DMZ"}]' \
+
+Pas de inbound rules je crois ?
 
 [OUTPUT]
 
@@ -45,6 +49,12 @@ instances.
 
 ```bash
 [INPUT]
+
+aws elbv2 create-target-group --name TG-DEVOPSTEAM06 --protocol HTTP --port 80 --vpc-id vpc-03d46c285a2af77ba --health-check-path / --health-check-interval-seconds 10 --health-check-timeout-seconds 5 --healthy-threshold-count 2 --unhealthy-threshold-count 2
+
+aws elbv2 create-listener \
+--load-balancer-arn $(aws elbv2 describe-load-balancers --names ELB-DEVOPSTEAM17 | jq -r '.LoadBalancers[0].LoadBalancerArn') \
+--protocol HTTP --port 8080 --default-actions Type=forward,TargetGroupArn= [INSERER ID DU TARGET GROUP]
 
 
 [OUTPUT]
