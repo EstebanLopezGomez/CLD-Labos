@@ -268,3 +268,21 @@ show databases;
 
 TODO : 	- Changer le masque de l'user de 0 à .240
 		- Refaire l'opération avec le subnet B 
+SUBNET B :
+SQL
+[INPUT]
+CREATE USER bn_drupal@'10.0.6.128/255.255.255.240' IDENTIFIED BY 'da4ec121fbd6ba30e1162c0b50d0d4a773ffb8f030821770b47f8ff50429fe
+f0';
+
+GRANT ALL PRIVILEGES ON bitnami_drupal.* TO 'bn_drupal'@'10.0.6.128/255.255.255.240';
+
+SHOW GRANTS for 'bn_drupal'@'10.0.6.140/255.255.255.240';
+
+[OUTPUT]
++-----------------------------------------------------------------------------------------------------------------------------------+
+| Grants for bn_drupal@10.0.6.128/255.255.255.240                                                                                   |
++-----------------------------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `bn_drupal`@`10.0.6.128/255.255.255.240` IDENTIFIED BY PASSWORD '*DC24853B02A54931D1902B9CBFB53CDB5CCFDEBC' |
+| GRANT ALL PRIVILEGES ON `bitnami_drupal`.* TO `bn_drupal`@`10.0.6.128/255.255.255.240`                                            |
++-----------------------------------------------------------------------------------------------------------------------------------+
+  
