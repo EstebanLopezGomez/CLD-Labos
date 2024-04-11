@@ -17,7 +17,7 @@ htop
 
 [OUTPUT]
 //copy the part representing vCPus, RAM and swap usage
-![alt text](img/htop.jpeg)
+![CPU](./img/htop.jpeg)
 ```
 
 ### Stress your instance
@@ -37,6 +37,7 @@ htop
 ```
 [INPUT]
 //Screen shot from cloud watch metric
+![CWM](./img/CloudWatchingMetric.png)
 ```
 [Sample](./img/CLD_AWS_CLOUDWATCH_CPU_METRICS.PNG)
 
