@@ -17,7 +17,7 @@ htop
 
 [OUTPUT]
 //copy the part representing vCPus, RAM and swap usage
-![alt text](htop.jpeg)
+![alt text](img/htop.jpeg)
 ```
 
 ### Stress your instance
