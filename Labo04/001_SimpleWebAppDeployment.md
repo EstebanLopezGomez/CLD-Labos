@@ -56,7 +56,12 @@ Create a simple web application as follows.
    `HelloAppEngine` file. What does the code do?
 
    ```
-   //TODO
+   It's a Java servlet class that handles GET requests, mapped to the /hello URL path. When  a GET request is made to this path, the app responds with a text message with the version of the Google App Engine and the Hava specification version.
+
+   It also has a getInfo() method that returns the info about :
+   - The java version
+   - The os name
+   - The user name
    ```
 
 6. Note the annotation starting with `@WebServlet` in front of the
@@ -66,14 +71,35 @@ Create a simple web application as follows.
    `web.xml`. What information does it contain? And what is its use ?
 
    ```
-   //TODO
+   <?xml version="1.0" encoding="utf-8"?>
+   <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+            http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+     <welcome-file-list>
+       <welcome-file>index.jsp</welcome-file>
+     </welcome-file-list>
+   </web-app>
+
+   It contains the information to configure the Java web application. It defines a list of web ressources that should be displayed when the user accesses the baseURL of the web app (for example in this case the user will be redirected to the index.jsp file as specified by <welcome-file>). 
+   
+   It can be used to define servlets, servlet-mapping, context parameters, filter, listeners...
    ```
 
 8. Inspect the Google App Engine configuration file
    `appengine-web.xml` in `webapp/WEB-INF`. What information does it contain?
 
    ```
-   //TODO
+     <?xml version="1.0" encoding="utf-8"?>
+   <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+       <runtime>java8</runtime>
+       <threadsafe>true</threadsafe>
+       <system-properties>
+           <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+       </system-properties>
+   </appengine-web-app>
+
+   It contains the java runtime version, that the application is threadsafe and can handle concurrent requests (threadsafe), it sets the location of the logging configuration file (system-properties). 
    ```
 
 9. Edit the Google App Engine configuration file as follows:
@@ -85,7 +111,7 @@ Create a simple web application as follows.
     `index.jsp` spotted in `web.xml`. What is its use ?
 
     ```
-    //TODO
+    It's the file that the user is redirected to when it opens the web application (index). It's like a welcome page of a website/web app.
     ```
 
 ---
@@ -155,17 +181,109 @@ Deliverables:
   **appengine-web.xml** and **index.jsp** files in a few sentences.
 
   ```
-  //TODO Java class files
+  // HelloAppEngine
+   package ch.heigvd.cld.lab;
+   
+   import com.google.appengine.api.utils.SystemProperty;
+   
+   import java.io.IOException;
+   import java.util.Properties;
+   
+   import javax.servlet.annotation.WebServlet;
+   import javax.servlet.http.HttpServlet;
+   import javax.servlet.http.HttpServletRequest;
+   import javax.servlet.http.HttpServletResponse;
+   
+   @WebServlet(name = "HelloAppEngine", value = "/hello")
+   public class HelloAppEngine extends HttpServlet {
+   
+     @Override
+     public void doGet(HttpServletRequest request, HttpServletResponse response)
+         throws IOException {
+
+    Properties properties = System.getProperties();
+
+    response.setContentType("text/plain");
+    response.getWriter().println("Hello App Engine - Standard using "
+        + SystemProperty.version.get() + " Java " + properties.get("java.specification.version"));
+     }
+
+     public static String getInfo() {
+       return "Version: " + System.getProperty("java.version")
+             + " OS: " + System.getProperty("os.name")
+             + " User: " + System.getProperty("user.name");
+     }
+   
+   }
+   
+   
+     It's a Java servlet class that handles GET requests, mapped to the /hello URL path. When  a GET request is made to this path, the app responds with a text message with the version of the Google App Engine and the Hava specification version.
+   
+      It also has a getInfo() method that returns the info about :
+      - The java version
+      - The os name
+      - The user name
+  ```
+
+
+  ```
+     // web.xml
+      <?xml version="1.0" encoding="utf-8"?>
+      <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+               http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+        <welcome-file-list>
+          <welcome-file>index.jsp</welcome-file>
+        </welcome-file-list>
+      </web-app>
+      
+      It contains the information to configure the Java web application. It defines a list of web ressources that should be displayed when the user accesses the baseURL of the web app (for example in this case the user will be redirected to the index.jsp file as specified by <welcome-file>). 
+      
+      It can be used to define servlets, servlet-mapping, context parameters, filter, listeners...
   ```
 
   ```
-  //TODO web.xml
+     // appengine-web.xml
+     <?xml version="1.0" encoding="utf-8"?>
+      <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+          <runtime>java8</runtime>
+          <threadsafe>true</threadsafe>
+          <system-properties>
+              <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+          </system-properties>
+      </appengine-web-app>
+      
+      It contains the java runtime version, that the application is threadsafe and can handle concurrent requests (threadsafe), it sets the location of the logging configuration file (system-properties). 
   ```
 
   ```
-  //TODO appengine-web.xml
-  ```
+     // index.jsp
+     <!DOCTYPE html>
+      <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+      <%@ page import="ch.heigvd.cld.lab.HelloAppEngine" %>
+      <html>
+      <head>
+        <link href='//fonts.googleapis.com/css?family=Marmelad' rel='stylesheet' type='text/css'>
+        <title>Hello App Engine Standard Java 8</title>
+      </head>
+      <body>
+          <h1>Hello App Engine -- Java 8!</h1>
+   
+     <p>This is <%= HelloAppEngine.getInfo() %>.</p>
+     <table>
+       <tr>
+         <td colspan="2" style="font-weight:bold;">Available Servlets:</td>
+       </tr>
+       <tr>
+         <td><a href='/hello'>Hello App Engine</a></td>
+       </tr>
+     </table>
+   
+      </body>
+      </html>
+   
+   
+      It's the file that the user is redirected to when it opens the web application (index). It's like a welcome page of a website/web app. It also allo us to choose which servlet we want to run.
 
-  ```
-  //TODO index.jsp
   ```
