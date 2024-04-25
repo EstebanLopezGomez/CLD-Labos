@@ -82,9 +82,13 @@ To develop and test the Servlet perform the following steps:
 Deliverables:
 
 ```
-//TODO - Commit and publish the servlet in your repo, in the 'labo4' directory.
+//TODO - Commit and publish the servlet in your repo, in the 'labo4' directory. DONE
 ```
+[Servlet](./DatastoreWrite.java)
+```
+//TODO - Copy a screenshot of the local and the App Engine console with the Datastore Viewer. DONE
+```
+![Local capture](./img/local_Part2.png)
+---
 
-```
-//TODO - Copy a screenshot of the local and the App Engine console with the Datastore Viewer.
-```
+![Online capture](./img/Website_Part2.png)
