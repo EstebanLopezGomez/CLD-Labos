@@ -71,9 +71,9 @@ Also we can see that most of the request have been made (as shown in the graphic
 - What response times do you observe for each Servlet?
 
   ```
-  read servlet : 
+  read servlet : On monte jusqu'à 2800ms de latence lors de l'envoie de requête. Puis l'auto-scaling crée de nouvelle instances et la latence diminue petit à petit jusqu'à descendre au alentour de 800ms
   
-  write servlet : On monte jusqu'à 2800ms de latence lors de l'envoie de requête. Puis l'auto-scaling crée de nouvelle instances et la latence diminue petit à petit jusqu'à descendre au alentour de 800ms
+  write servlet : 
   ```
 
 - Compare the response times shown by vegeta with the App Engine
@@ -96,8 +96,9 @@ Also we can see that most of the request have been made (as shown in the graphic
   instances is not working correctly. Imagine a way in which the algorithm could be broken. Which measures shown in the console would you use to detect this failure?
 
   ```
- L'automatic scaling ne fonctionne pas correctement dans le cas où lorsqu'il y a beaucoup de requêtes envoyé et donc une grande consommation des ressources (CPU, RAM), il n'y a pas d'augmentation des instances. Ou à l'inverse, lorsque le nombre de requête est faible, le nombre d'instance ne diminue pas.
+  L'automatic scaling ne fonctionne pas correctement dans le cas où lorsqu'il y a beaucoup de requêtes envoyé et donc une grande consommation des ressources (CPU, RAM), il n'y a pas d'augmentation des instances. Ou à l'inverse, lorsque le nombre de requête est faible, le nombre d'instance ne diminue pas.
  Une manière de vérifier que l'automatic scaling fonctionne serait de vérifier dans Google App Engine le nombre d'instances lorsque l'on envoie des milliers de requête via vegeta et/ou de surveiller l'utilisation de la RAM, la latence ou encore le % d'erreur des requêtes.
+ 
   ```
 
 ## Troubleshooting
