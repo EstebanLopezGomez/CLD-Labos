@@ -60,6 +60,14 @@ As we can see, the 1000 request are made with a success rate of 97.7%, the faile
 
 Also we can see that most of the request have been made (as shown in the graphic of the Google Cloud dashboard). 
 
+  First test : Test basic insertion to website's database (GET https:///loyal-rookery-420712.ew.r.appspot.com)
+  ```
+![Basic Database test](./img/TestInsertData.png)
+---
+![Vegeta Command Database test](./img/TestInsertData_Vegeta.png)
+
+![Vegeta Command Database test](./img/TestInsertData_Vegeta_Graph.png)
+
 - What response times do you observe for each Servlet?
 
   ```
