@@ -66,14 +66,14 @@ Also we can see that most of the request have been made (as shown in the graphic
 ---
 ![Vegeta Command Database test](./img/TestInsertData_Vegeta.png)
 
-![Vegeta Command Database test](./img/TestInsertData_Vegeta_Graph.png)
+![Vegeta Command Database test](./img/WriteRapport.png)
 
 - What response times do you observe for each Servlet?
 
   ```
   read servlet : On monte jusqu'à 2800ms de latence lors de l'envoie de requête. Puis l'auto-scaling crée de nouvelle instances et la latence diminue petit à petit jusqu'à descendre au alentour de 800ms
   
-  write servlet : 
+  write servlet : Une grosse montée jusqu'à 420ms de latence au début de l'envoie de requête, puis comme pour le read, on arrive à quelque chose de plus régulier qui reste au alentour de 100-150ms.
   ```
 
 - Compare the response times shown by vegeta with the App Engine
@@ -89,7 +89,13 @@ Also we can see that most of the request have been made (as shown in the graphic
   To get a sense of everything that is measured click on **Show resources not in use**.
 
   ```
-  //TODO
+  Cloud Firestore API Calls : Le nombre d'appel fait au Datastore API en lecture / écriture
+  Cloud firestore stored data > Quantité de données stockée dans le datastore en GB
+  Data Sent to Cloud Firestore API > Quantité de donnée envoyé au datastore en GB
+  Data Received from Cloud Firestore API > Quantité de donnée reçu par le datastore en GB 
+  Cloud Firestore Entity Fetch Ops > Quantité d'entité fetchée depuis le datastore 
+  Cloud Firestore Entity Writes > Quantité d'entitée écrite dans le datastore
+  Cloud Firestore Index Write Ops > Nombre d'index écrit dans le datastore
   ```
 
 - Let's suppose you become suspicious that the algorithm for the automatic scaling of
