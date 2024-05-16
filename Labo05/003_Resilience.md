@@ -43,23 +43,23 @@ $ kubectl get pods --watch
 You may also use `kubectl get all` repeatedly to see a list of all resources.  You should also verify if the application stays available by continuously reloading your browser window.
 
   * What happens if you delete a Frontend or API Pod? How long does it take for the system to react?
-    > // TODO
+    > Le système voit qu'il n'y a pas le nombre de PODS et en crée une presque immédiatement.
     
   * What happens when you delete the Redis Pod?
 
-    > // TODO
+    > L'api devient innacessible/inutilisable tant que le nouveau POD n'est pas recrée
     
   * How can you change the number of instances temporarily to 3? Hint: look for scaling in the deployment documentation
 
-    > // TODO
+    > kubectl scale deployment redis-deploy --replicas=3
     
   * What autoscaling features are available? Which metrics are used?
 
-    > // TODO
+    > Depuis notre page Google Cloud on peut avoir des grapgiques sur l'utilisation du processeur (CPU usage), de la mémoire (memory usage) et du disque (volume usage) du Pod désiré. 
     
   * How can you update a component? (see "Updating a Deployment" in the deployment documentation)
 
-    > // TODO
+    > On doit modifier le fichier yaml puis lancer la commande : kubectl apply -f deployment.yaml . On peut aussi lancer la commande kubectl edit <fichier> pour le faire. Ensuite Kubernetes s'occupe de mettre à jour les Pods avec la nouvelle version (ce concept s'appelle "rollout").
 
 ## Subtask 3.3 - Put autoscaling in place and load-test it
 
