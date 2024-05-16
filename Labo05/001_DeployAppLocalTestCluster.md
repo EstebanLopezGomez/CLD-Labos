@@ -176,17 +176,217 @@ You should see the application's main page titled __Todos V2__ and you should be
 Document any difficulties you faced and how you overcame them. Copy the object descriptions into the lab report.
 
 > // TODO
-
+Nous n'avons pas fait face à une difficulté particulière, si ce n'est pour la création des différents fichiers qui nous a pris un peu de temps car nous ne maitrisons pas ce type de sujet. Nous avons donc dû beaucoup nous documenter pour être sûr du fichier que nous avons produit.
 ```````
 // TODO object descriptions
+C:\Windows\System32>kubectl describe all
+Name:             frontend
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Thu, 16 May 2024 15:48:56 +0200
+Labels:           app=todo
+                  component=frontend
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.5
+IPs:
+  IP:  10.244.0.5
+Containers:
+  frontend:
+    Container ID:   docker://3fe9acae5c077fbccafeb817734cf68c3c073c446f3bc3dc5f4a74904037c3ef
+    Image:          icclabcna/ccp2-k8s-todo-frontend
+    Image ID:       docker-pullable://icclabcna/ccp2-k8s-todo-frontend@sha256:5892b8f75a4dd3aa9d9cf527f8796a7638dba574ea8e6beef49360a3c67bbb44
+    Port:           8080/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Thu, 16 May 2024 15:49:18 +0200
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      API_ENDPOINT_URL:  http://api-svc:8081
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-zlfzr (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-zlfzr:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  7m37s  default-scheduler  Successfully assigned default/frontend to minikube
+  Normal  Pulling    7m37s  kubelet            Pulling image "icclabcna/ccp2-k8s-todo-frontend"
+  Normal  Pulled     7m17s  kubelet            Successfully pulled image "icclabcna/ccp2-k8s-todo-frontend" in 20.368s (20.368s including waiting). Image size: 746900794 bytes.
+  Normal  Created    7m16s  kubelet            Created container frontend
+  Normal  Started    7m16s  kubelet            Started container frontend
+
+
+Name:             redis
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Thu, 16 May 2024 15:32:26 +0200
+Labels:           app=todo
+                  component=redis
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.4
+IPs:
+  IP:  10.244.0.4
+Containers:
+  redis:
+    Container ID:  docker://44779e87a8de0a7ac7bf75fa9fbe945ac53aabc00676698d6e96f3e783ab6100
+    Image:         redis
+    Image ID:      docker-pullable://redis@sha256:5a93f6b2e391b78e8bd3f9e7e1e1e06aeb5295043b4703fb88392835cec924a0
+    Port:          6379/TCP
+    Host Port:     0/TCP
+    Args:
+      redis-server
+      --requirepass ccp2
+      --appendonly yes
+    State:          Running
+      Started:      Thu, 16 May 2024 15:32:44 +0200
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-gczm7 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-gczm7:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  24m   default-scheduler  Successfully assigned default/redis to minikube
+  Normal  Pulling    24m   kubelet            Pulling image "redis"
+  Normal  Pulled     23m   kubelet            Successfully pulled image "redis" in 17.036s (17.036s including waiting). Image size: 116496163 bytes.
+  Normal  Created    23m   kubelet            Created container redis
+  Normal  Started    23m   kubelet            Started container redis
+
+
+Name:              api
+Namespace:         default
+Labels:            app=todo
+                   component=api
+Annotations:       <none>
+Selector:          app=todo,component=api
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                10.101.137.63
+IPs:               10.101.137.63
+Port:              http  8081/TCP
+TargetPort:        8081/TCP
+Endpoints:         <none>
+Session Affinity:  None
+Events:            <none>
+
+
+Name:              kubernetes
+Namespace:         default
+Labels:            component=apiserver
+                   provider=kubernetes
+Annotations:       <none>
+Selector:          <none>
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                10.96.0.1
+IPs:               10.96.0.1
+Port:              https  443/TCP
+TargetPort:        8443/TCP
+Endpoints:         192.168.49.2:8443
+Session Affinity:  None
+Events:            <none>
+
+
+Name:              redis-svc
+Namespace:         default
+Labels:            component=redis
+Annotations:       <none>
+Selector:          app=todo,component=redis
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                10.98.201.32
+IPs:               10.98.201.32
+Port:              redis  6379/TCP
+TargetPort:        6379/TCP
+Endpoints:         10.244.0.4:6379
+Session Affinity:  None
+Events:            <none>
 ```````
 
 ```yaml
 # api-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  labels:
+    component: api
+    app: todo
+spec:
+    selector:
+        component: api
+        app: todo
+    ports:
+      - name: http
+        port: 8081
+        targetPort: 8081
+    type: ClusterIP
 ```
 
 ```yaml
 # frontend-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+  labels:
+    component: frontend
+    app: todo
+spec:
+  containers:
+  - name: frontend
+    image: icclabcna/ccp2-k8s-todo-frontend
+    ports:
+    - name: http
+      containerPort: 8080
+    env:
+    - name: API_ENDPOINT_URL
+      value: http://api-svc:8081
 ```
 
 > [!TIP]
