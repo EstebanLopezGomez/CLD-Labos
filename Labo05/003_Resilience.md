@@ -18,7 +18,8 @@ Converting a Pod to be managed by a Deployment is quite simple.
 
   * Use only 1 instance for the Redis-Server. Why?
 
-    > // TODO
+    > On utilise une seule instance de redis éviter d'avoir des soucis de synchronisation entre les données en mémoires. 
+	  On pourrait avoir des données incohérentes entre plusieurs instances puisqu'on ne vas pas configurer la réplication entre les instances.
 
   * Delete all application Pods (using `kubectl delete pod ...`) and replace them with deployment versions.
 
@@ -99,17 +100,214 @@ Document your observations in the lab report. Document any difficulties you face
 
 
 ```````sh
-// TODO autoscaling description
+C:\Windows\System32>kubectl describe deployment
+Name:                   api
+Namespace:              default
+CreationTimestamp:      Thu, 16 May 2024 17:22:29 +0200
+Labels:                 app=todo
+                        component=api
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=todo,component=api
+Replicas:               2 desired | 2 updated | 2 total | 0 available | 2 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=todo
+           component=api
+  Containers:
+   api:
+    Image:      docker.io/icclabcna/ccp2-k8s-todo-api
+    Port:       8081/TCP
+    Host Port:  0/TCP
+    Environment:
+      REDIS_ENDPOINT:  redis-svc
+      REDIS_PWD:       ccp2
+    Mounts:            <none>
+  Volumes:             <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      False   MinimumReplicasUnavailable
+OldReplicaSets:  <none>
+NewReplicaSet:   api-59748d7b66 (2/2 replicas created)
+Events:          <none>
+
+
+Name:                   frontend
+Namespace:              default
+CreationTimestamp:      Thu, 16 May 2024 17:22:34 +0200
+Labels:                 app=todo
+                        component=frontend
+Annotations:            deployment.kubernetes.io/revision: 2
+Selector:               app=todo,component=frontend
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=todo
+           component=frontend
+  Containers:
+   frontend:
+    Image:      docker.io/icclabcna/ccp2-k8s-todo-frontend
+    Port:       8080/TCP
+    Host Port:  0/TCP
+    Requests:
+      cpu:  100m
+    Environment:
+      API_ENDPOINT_URL:  http://api-svc:8081
+    Mounts:              <none>
+  Volumes:               <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  frontend-7d9589956c (0/0 replicas created)
+NewReplicaSet:   frontend-7fbdddfbb5 (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  44s   deployment-controller  Scaled up replica set frontend-7fbdddfbb5 to 1
+  Normal  ScalingReplicaSet  41s   deployment-controller  Scaled down replica set frontend-7d9589956c to 1 from 2
+  Normal  ScalingReplicaSet  41s   deployment-controller  Scaled up replica set frontend-7fbdddfbb5 to 2 from 1
+  Normal  ScalingReplicaSet  39s   deployment-controller  Scaled down replica set frontend-7d9589956c to 0 from 1
+
+
+Name:                   redis
+Namespace:              default
+CreationTimestamp:      Thu, 16 May 2024 17:21:52 +0200
+Labels:                 app=todo
+                        component=redis
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=todo,component=redis
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=todo
+           component=redis
+  Containers:
+   redis:
+    Image:      redis
+    Port:       6379/TCP
+    Host Port:  0/TCP
+    Args:
+      redis-server
+      --requirepass ccp2
+      --appendonly yes
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   redis-56fb88dd96 (1/1 replicas created)
+Events:          <none>
 ```````
 
 ```yaml
 # redis-deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: todo
+    component: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo
+      component: redis
+  template:
+    metadata:
+      labels:
+        app: todo
+        component: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
+          args:
+            - redis-server 
+            - --requirepass ccp2 
+            - --appendonly yes
 ```
 
 ```yaml
 # api-deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app: todo
+    component: api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo
+      component: api
+  template:
+    metadata:
+      labels:
+        app: todo
+        component: api
+    spec:
+      containers:
+        - name: api
+          image: docker.io/icclabcna/ccp2-k8s-todo-api
+          ports:
+            - containerPort: 8081
+          env:
+            - name: REDIS_ENDPOINT
+              value: redis-svc
+            - name: REDIS_PWD
+              value: ccp2
 ```
 
 ```yaml
 # frontend-deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: todo
+    component: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: todo
+        component: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: docker.io/icclabcna/ccp2-k8s-todo-frontend
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: API_ENDPOINT_URL
+              value: http://api-svc:8081
+          resources:
+            requests:
+              cpu: 100m
 ```

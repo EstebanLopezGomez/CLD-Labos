@@ -176,7 +176,8 @@ You should see the application's main page titled __Todos V2__ and you should be
 Document any difficulties you faced and how you overcame them. Copy the object descriptions into the lab report.
 
 > // TODO
-Nous n'avons pas fait face à une difficulté particulière, si ce n'est pour la création des différents fichiers qui nous a pris un peu de temps car nous ne maitrisons pas ce type de sujet. Nous avons donc dû beaucoup nous documenter pour être sûr du fichier que nous avons produit.
+Nous avons eu aucun problème pour cette étape, cependant lors de l'étape 2 notre load balancer n'avait pas de "endpoint". J'ai donc supprimer et redeployer en ne modifiant que le fichier
+api-svc.yaml et la seule chose que j'ai modifié est l'ordre des lignes en inversant ports et selector. Une fois recréer mon endpoint était bien configuré, j'ai donc du faire une petite erreur lors du déploiement.
 ```````
 // TODO object descriptions
 C:\Windows\System32>kubectl describe all
@@ -353,19 +354,18 @@ Events:            <none>
 apiVersion: v1
 kind: Service
 metadata:
-  name: api
   labels:
     component: api
-    app: todo
+  name: api-svc
 spec:
-    selector:
-        component: api
-        app: todo
-    ports:
-      - name: http
-        port: 8081
-        targetPort: 8081
-    type: ClusterIP
+  ports:
+  - port: 8081
+    targetPort: 8081
+    name: http
+  selector:
+    app: todo
+    component: api
+  type: ClusterIP
 ```
 
 ```yaml
