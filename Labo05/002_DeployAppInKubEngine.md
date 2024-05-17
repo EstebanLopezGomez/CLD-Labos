@@ -65,7 +65,7 @@ Now you can verify if the ToDo application is working correctly.
 
 Document any difficulties you faced and how you overcame them. Copy the object descriptions into the lab report (if they are unchanged from the previous task just say so).
 
-> // TODO
+> // On a eu le problème qu'on a évoqué à l'étape 1, rien de plus.
 
 ```````
 // TODO object descriptions
@@ -320,7 +320,7 @@ spec:
 
 Take a screenshot of the cluster details from the GKE console. Copy the output of the `kubectl describe` command to describe your load balancer once completely initialized.
 
-> // TODO
+> 
 ![Cluster 1/3](./img/Cluster01.png)
 ![Cluster 2/3](./img/Cluster02.png)
 ![Cluster 3/3](./img/Cluster03.png)
